@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 
 //Routes
-app.use(require('./src/routes/index'));
+app.use(require('./src/controller/APIController'));
 
 //ErrorHandler
 app.use((err, req, res, next)=>{
