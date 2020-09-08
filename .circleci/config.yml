@@ -1,26 +1,28 @@
-version: 2.1
+version: 2
 
-orbs:
-  node: circleci/node@2.0.3
-
-commands:
-  setup-node:
-    steps:
-      - node/install:
-          node-version: latest
 
 jobs:
-  test:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: circleci/node:8
+
+    working_directory: ~/repo
+
     steps:
       - checkout
-      - setup-node
-      - run:
-          name: Run tests
-          command: npm test
 
-workflows:
-  run-ci:
-    jobs:
-      - test
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: npm test
