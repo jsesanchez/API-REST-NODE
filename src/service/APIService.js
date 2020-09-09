@@ -1,66 +1,113 @@
 const connection = require('../../DB_Connection/connection');
-const conn =connection();
+const express  = require ('express');
+//const service = {};
+function conn(){
+    return connection();
+}
+const app = express();
+module.exports = {
 
 
-const service = {};
-
-service.ListarAll = (req,res) => {
+ListarAll: function ListarAll (req,res)  {
+    conne=conn();
     const sql = 'SELECT * FROM location';
-    conn.query(sql,(error, results)=>{
+    conne.query(sql,(error, results)=>{
         if(error) throw error;
         if(results.length >0) {
-            res.json(results);
+           //res.json(results);
+            //console.log("Entro ALL y listo ", results)
         }else{
-            res.send("No Location");
+            //res.send("No Location");
+            //console.log("No Locations");
         }
     });
-}
+},
 
 
-service.ListarID = (req,res) => {
+ListarID: function ListarID (req,res) {
+    conne=conn();
     const {id} = req.params;
     const sql = `SELECT * FROM location WHERE id='${id}'`;
-    conn.query(sql,(error, results)=>{
+    conne.query(sql,(error, results)=>{
         if(error) throw error;
         if(results.length >0) {
-            res.json(results);
+            //res.json(results);
+            //console.log("Entro ID y listo ", results)
         }else{
-            res.send("No Location ID");
+            //res.send("No Location ID");
+            //console.log("No Location ID");
         }
     });
-}
+},
 
-service.add = (req,res) =>{
+add: function add (req,res) {
+    conne=conn();
     const sql = 'INSERT INTO location SET ?';
     const locationObj = {
         name: req.body.name,
         area_m2: req.body.area_m2
     };
-    conn.query(sql,locationObj,(error,result)=>{
+    conne.query(sql,locationObj,(error,result)=>{
         if(error) throw error;
-        res.send("OK");   
+        //res.send("OK");   
+        console.log("OK");
     });
-}
+},
 
 
-service.update = (req,res) =>{
+update: function update  (req,res) {
+    conne=conn();
     const {id}=req.params;
     const{name, area_m2} = req.body;
     const sql =`UPDATE location SET name = '${name}', area_m2 ='${area_m2}' WHERE id='${id}'`;
-    conn.query(sql,error=>{
+    conne.query(sql,error=>{
         if(error) throw error;
-        res.send("OK UPDATE");   
+        //res.send("OK UPDATE");
+        //console.log("UPDATE");   
    });
-}
+},
 
-service.delete = (req,res) =>{
+delate: function delate (req,res) {
+    conne=conn();
     const {id}=req.params;
     const sql = `DELETE FROM location WHERE id = '${id}'`;
-    conn.query(sql,(error, result)=>{
+    conne.query(sql,(error, result)=>{
         if(error) throw error;
-        res.send("OK DELETE");
+        //res.send("OK DELETE");
+        //console.log("DELETE");
     });
+},
+calculadora: function caluladora (req,res) {
+    const {id}=req.params;
+    const{num1, num2} = req.body;  
+    if(Number(id) === 1){
+        rta = Number(num1) + Number(num2);
+        //res.body = String(rta)
+        console.log(rta);
+        res.send(res.body);
+        return Number(rta);
+    } else if(Number(id) === 2){
+        rta = Number(num1) - Number(num2);
+        res.body = String(rta)
+        console.log(rta);
+        res.send(res.body);
+        return rta;
+    } else if(Number(id) === 3){
+        rta = Number(num1) * Number(num2);
+        res.body = String(rta)
+        console.log(rta);
+        res.send(res.body);
+        return rta;
+    } else if(Number(id) === 4){
+        rta = Number(num1) / Number(num2);
+        res.body = String(rta)
+        console.log(rta);
+        res.send(res.body);
+        return Number(rta);
+    } 
+    
 }
 
-
-module.exports =service;
+}
+//module.exports =service;
+//module.exports =delate,caluladora,update,add,ListarID,ListarAll,conn;

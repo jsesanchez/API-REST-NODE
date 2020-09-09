@@ -11,6 +11,4 @@ module.exports = () =>
         database : 'db'
     },
     'single'
-  )
-
-
+  ) 
